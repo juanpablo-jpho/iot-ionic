@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Control IOT
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col sizeXs="12" sizeSm="11" sizeMd="10" sizeLg="8" sizeXl="6" >
+            <div style="margin: 10px;"></div>
+          
+            <ion-segment (ionChange)="segmentChanged($event)" value="temp">
+              <ion-segment-button value="temp">
+                <ion-label>Temperatura</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="contr">
+                <ion-label>Controles</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="hist">
+                <ion-label>Historial</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          
+          
+            <ion-card *ngIf="seccion == 'temp'">
+              <ion-item>
+                <ion-icon slot="start" name="thermometer-outline" color="primary"></ion-icon>
+                <ion-label>
+                  <strong>Temp: </strong> {{lastMedicion.sensor}} ºC
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="timer-outline" color="primary"></ion-icon>
+                <ion-label>
+                  {{lastMedicion.time | date:'medium'}}
+                </ion-label>
+              </ion-item>
+          
+          
+            </ion-card>
+          
+            <ion-card *ngIf="seccion == 'contr'">
+          
+              <ion-list>
+                <ion-list-header>
+                  Control ventilador
+                </ion-list-header>
+          
+                <ion-item>
+                  <ion-label>Manual</ion-label>
+                  <ion-toggle [(ngModel)]="manual"  (ionChange)="toogleChange($event)"></ion-toggle>
+                </ion-item>
+          
+                <ion-item *ngIf="manual">
+                  <ion-label>Prender</ion-label>
+                  <ion-toggle (ionChange)="toogleChangePrender($event)"></ion-toggle>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-avatar *ngIf="!ventilador_state"  style="background: #c8c7cc; margin-right: 10px;">
+                  </ion-avatar>
+                  <ion-avatar *ngIf="ventilador_state" style="background: #2dd36f; margin-right: 10px;">
+                  </ion-avatar>
+                  <ion-label>
+                    Ventilador: {{ventilador_state ? 'ON' : 'OFF'}}
+                  </ion-label>
+                </ion-item>
+          
+              </ion-list>
+          
+          
+            </ion-card>
+          
+            <ion-card *ngIf="seccion == 'contr'">
+          
+              <ion-list>
+          
+                <ion-list-header>
+                  Control Umbral
+                </ion-list-header>
+          
+                <ion-item>
+                  <ion-label>
+                    Umbral: {{umbral}} ºC
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-range min="0" max="80" step="2" pin="true" [value]="umbral" (ionChange)="rangeChange($event)"
+                    debounce="500">
+                    <ion-icon size="small" slot="start" name="thermometer-outline" color="primary"></ion-icon>
+                    <ion-icon slot="end" name="thermometer-outline" color="primary"></ion-icon>
+                  </ion-range>
+                </ion-item>
+          
+          
+              </ion-list>
+          
+          
+          
+          
+          
+          
+            </ion-card>
+          
+            <ion-card *ngIf="seccion == 'hist'">
+              <ion-list>
+                <ion-list-header>
+                  Historial:
+                </ion-list-header>
+                <ion-item *ngFor="let medicion of mediciones">
+                  <ion-label>
+                    <strong>Temp: </strong> {{medicion.sensor}} ºC
+                    <p>{{medicion.time | date:'medium'}} </p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+</ion-content>
